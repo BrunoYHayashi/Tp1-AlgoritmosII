@@ -5,9 +5,10 @@ struct paciente;
 
 /*
 Tenta alocar a heap
-Em caso de falha, retorna NULL
-*/
+Em caso de falha, retorna NULL 
 em caso de sucesso, retorna o ponteiro para ponteiro da heap
+*/
+
 struct paciente **InicHeap(int N);
 
 /*essa funcao eh o insere heap para o heapfy*/
