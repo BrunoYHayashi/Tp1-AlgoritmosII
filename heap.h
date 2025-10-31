@@ -36,6 +36,6 @@ void ImprimeHeap(struct paciente *heap[], int tam);
 void HeapSort(struct paciente *heap[], int tam);
 
 /*altera a prioridade do paciente indicado pelo parametro nome[]*/
-void AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam);
+int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam);
 
 #endif
