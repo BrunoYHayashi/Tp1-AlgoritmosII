@@ -63,20 +63,19 @@ void QuickSort(struct paciente *heap[], int ini, int fim, *n_comp, *n_trocas){
     
 }
 
-void SelectSort(struct paciente *heap[], int tam){
+void SelectSort(struct paciente *heap[], int tam, int *n_comp, int *n_trocas){
     int i, j, menor, n_comp, n_trocas;
 
     for(i=1;i<tam;i++){
         v[menor] = v[i];
-        for(j=i+1;j<=tam;j++)
-            if(v[menor] < v[j]){
-                n_comp++;
+        for(j=i+1;j<=tam;j++){
+            (*n_comp)++;
+            if(v[menor] < v[j])
                 menor = j;
-            }
+        }
         aux = v[menor];
         v[menor] = v[i];
         v[i] = aux;
-        n_trocas++;
+        (*n_trocas)++;
     }
-    printf("foram feitas %d comparacoes e %d trocas", n_comp, n_trocas);
 }
