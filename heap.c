@@ -11,7 +11,7 @@ static void SacodeHeap (int tam, struct paciente *heap[]){
     struct paciente *AUX;
 
     while (i<=tam){
-        if ((i< tam) && (heap[i] < heap [i+1]))
+        if ((i< tam) && (heap[i]->prioridade < heap [i+1]->prioridade))
             i++;
         if (heap[i/2] >= heap[i])
             break;
@@ -46,24 +46,29 @@ void InsereHeap(struct paciente *heap[], int tam){ //*heap[] = **heap.
 int RemoveHeap(struct paciente *heap[], int *tam){
     int i;
     struct paciente *pacienteRemovido;
-    pacienteRemovido = heap[i];
-    for (i=1; i<tam; i++)
+
+    pacienteRemovido = heap[1];
+    for (i=1; i<*tam; i++)
         heap[i] = heap[i+1];
+
     free (pacienteRemovido);
+    pacienteRemovido = NULL;
+
     *tam= *tam -1;
+    Heapfy(heap, *tam);
 }
 
 
 void Heapfy(struct paciente *heap[], int N){
     int i;
     for (i=1; i<N; i++)
-        InsereHeap (i, heap);
+        InsereHeap (heap, i);
 }
 
 int ChecaHeap(struct paciente *heap[], int tam){
     int i;
     for (i=tam; i>1; i--) 
-        if (heap[i]>heap[i/2])
+        if (heap[i]->prioridade > heap[i/2]->prioridade)
             return 0;
     return 1;  
 }
@@ -78,7 +83,7 @@ void HeapSort(struct paciente *heap[], int N){
     int i;
     struct paciente *AUX;
 
-    heapfy(heap);
+    Heapfy(heap, N);
     for (i=N; i>1; i--) {
         AUX= heap[1]; 
         heap[1] = heap[i];
