@@ -91,3 +91,19 @@ void HeapSort(struct paciente *heap[], int N){
         SacodeHeap (i-1, heap);
     }
 }
+
+int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
+    int i;
+
+    i=1;
+    while (nome != heap[i]->nome && i<=tam){
+        i=i+1;
+    }
+
+    if (i>tam)
+        return 0;
+
+    heap[i]->prioridade = prioridade;
+    
+    Heapfy(heap, tam);
+}
