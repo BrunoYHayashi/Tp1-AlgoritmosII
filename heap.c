@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct paciente {
     char nome[50];
@@ -13,14 +14,14 @@ static void SacodeHeap (int tam, struct paciente *heap[]){
     while (i<=tam){
         if ((i< tam) && (heap[i]->prioridade < heap [i+1]->prioridade))
             i++;
-        if (heap[i/2] >= heap[i])
+        if (heap[i/2]->prioridade >= heap[i]->prioridade)
             break;
         AUX= heap[i/2];
         heap[i/2]= heap[i];
         heap[i]= AUX;
         i=i*2;
     }
-};
+}
 
 struct paciente **InicHeap(int N){ //N é o número máximo do vetor
     struct paciente **heap;
@@ -96,7 +97,7 @@ int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
     int i;
 
     i=1;
-    while (nome != heap[i]->nome && i<=tam){
+    while (strcmp(nome, heap[i]->nome)!= 0 && i<=tam){
         i=i+1;
     }
 
