@@ -1,0 +1,79 @@
+Pontos a Melhorar (Eficiência)
+As maiores desvantagens do seu código estão na performance de algumas operações. A grande vantagem de um heap é ter inserções e remoções em tempo O(log n). No seu código, algumas dessas operações são muito mais lentas.
+1. Função RemoveHeap
+Sua implementação de RemoveHeap é extremamente ineficiente. Ela remove o primeiro elemento e depois desloca todos os outros elementos do vetor (O(n)), para em seguida reconstruir o heap inteiro com Heapfy (O(n log n)).
+Algoritmo Correto e Eficiente (O(log n)):
+Salve o paciente do topo (índice 1) para retorná-lo ou processá-lo.
+Mova o último elemento do heap para o topo (índice 1).
+Diminua o tamanho do heap em 1.
+Chame uma função para "peneirar para baixo" (sift-down), como a SacodeHeap (depois de corrigida), a partir do topo para restaurar a propriedade do max heap.
+Sugestão de Reescrita:
+code
+C
+// Renomeando SacodeHeap para um nome mais padrão e corrigindo-a
+static void PeneirarParaBaixo(struct paciente *heap[], int tam) {
+    int i = 1; // Começa do topo
+    struct paciente *AUX;
+
+    while (2 * i <= tam) { // Enquanto houver pelo menos um filho
+        int filho = 2 * i;
+        // Verifica se o filho da direita existe e é maior que o da esquerda
+        if (filho < tam && heap[filho]->prioridade < heap[filho + 1]->prioridade) {
+            filho++;
+        }
+        // Se o pai for maior ou igual ao maior dos filhos, a propriedade do heap está ok
+        if (heap[i]->prioridade >= heap[filho]->prioridade) {
+            break;
+        }
+        // Troca o pai com o maior dos filhos
+        AUX = heap[i];
+        heap[i] = heap[filho];
+        heap[filho] = AUX;
+        // Desce para a próxima sub-árvore
+        i = filho;
+    }
+}
+
+struct paciente* RemoveHeap(struct paciente *heap[], int *tam) {
+    if (*tam == 0) {
+        printf("Heap vazio!\n");
+        return NULL;
+    }
+
+    struct paciente *pacienteRemovido = heap[1]; // Salva o paciente a ser removido
+
+    heap[1] = heap[*tam]; // Move o último para o topo
+    *tam = *tam - 1;      // Decrementa o tamanho
+
+    if (*tam > 0) {
+        PeneirarParaBaixo(heap, *tam); // Corrige o heap a partir do topo
+    }
+
+    return pacienteRemovido; // Retorna o paciente para que quem chamou a função decida o que fazer (ex: free)
+}
+Note que mudei a função para retornar o paciente removido. Isso é mais flexível do que dar free dentro dela.
+2. Função Heapfy
+Sua função Heapfy constrói o heap chamando InsereHeap N vezes. Isso funciona, mas tem uma complexidade de O(n log n). O algoritmo padrão de construção de heap (build-heap) é mais rápido, com complexidade O(n). Ele consiste em chamar a função "peneirar para baixo" para cada nó não-folha, começando do último.
+Sugestão de Heapfy mais eficiente (O(n)):
+code
+C
+void Heapfy(struct paciente *heap[], int N) {
+    // Começa do último nó que não é folha (pai do último elemento) e vai até a raiz
+    for (int i = N / 2; i >= 1; i--) {
+        PeneirarParaBaixo(heap, N); // Use a função 'peneirar para baixo' corrigida
+    }
+}
+3. Função AlteraHeap
+Assim como na remoção, após alterar a prioridade de um paciente, não é necessário reconstruir o heap inteiro com Heapfy.
+Algoritmo Correto e Eficiente (O(log n)):
+Encontre o paciente e altere sua prioridade.
+Guarde a prioridade antiga.
+Se a nova prioridade for maior que a antiga, faça um "peneirar para cima" (sift-up), que é a mesma lógica da sua função InsereHeap.
+Se a nova prioridade for menor, faça um "peneirar para baixo" (sift-down).
+Resumo e Conclusão
+O seu código é um ótimo exercício de aprendizado, mas não está funcional nem eficiente no estado atual devido aos bugs de comparação e aos algoritmos lentos utilizados para remoção e alteração.
+Para torná-lo bom, você precisa:
+Corrigir as comparações de ponteiros em SacodeHeap e AlteraHeap.
+Reescrever a função RemoveHeap para usar o algoritmo padrão de O(log n).
+Opcional, mas recomendado: Otimizar Heapfy e AlteraHeap para usarem os algoritmos mais eficientes.
+Corrigindo esses pontos, você terá um código robusto, correto e com a performance esperada de uma estrutura de dados do tipo heap.
