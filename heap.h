@@ -1,7 +1,10 @@
 #ifndef Heap
 #define Heap
 
-struct paciente;
+struct paciente {
+    char nome[50];
+    int prioridade; //Max heap
+}; 
 
 /*Sacode o heap, elemento de heap[1] percorre o heap até se encontrar. 
 Essa versão do SacodeHeap é adaptada ao resto do código para sua reutilização,
