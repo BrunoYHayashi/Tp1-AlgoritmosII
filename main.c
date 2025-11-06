@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "heap.h"
-//#include "sorts.h"
+#include "sorts.h"
 
 int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     const int MAX= 50; 
@@ -102,6 +102,24 @@ void CompararSorts(){
 
 }
 
+void LiberaVetor(struct paciente *heap[], int tam){
+    if(!heap)
+        return;
+
+    struct paciente *atual;
+    int i=1;
+
+    atual= heap[1];
+
+    while(atual!=NULL && i<=tam){
+        free(atual);
+        i++;
+        atual= heap[i];
+    }
+
+    free(heap);
+}
+
 int main(){
     int operacao, encerrar = 0, tam; //tam= numero de pacientes no vetor
     struct paciente **heap;
@@ -149,6 +167,7 @@ int main(){
             break;
 
             case 7:
+            LiberaVetor(heap, tam);
             encerrar = 1;
             break;
 
