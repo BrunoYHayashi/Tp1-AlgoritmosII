@@ -1,26 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "heap.h"
 //#include "sorts.h"
 
-int CadastrarPaciente(struct paciente *heap[], int *tam){
- /*   struct paciente *p;
+int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
+    const int MAX= 50; 
+    char nome[MAX];
+    int prioridade;
 
-    if(!(p = malloc(sizeof(struct paciente *)))){
-        printf("nao foi possivel alocar memoria");
+    printf("Insira o nome do paciente");
+    fgets(nome, MAX, stdin); //lê o nome
+    nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
+
+    printf("Insira a prioridade do paciente");
+    scanf("%d", &prioridade);
+
+    int c; //Serve para limbar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
+    while ((c=getchar()) != '\n' && c != EOF);
+
+    int sucesso;
+    sucesso = InsereNovoHeap(heap, nome, prioridade, tam, N);
+
+    if (!sucesso) {
+        printf("Falha ao cadastrar paciente, heap cheio ou memória insuficiente.\n");
         return 0;
     }
 
-    printf("Insira o nome do paciente");
-    scanf("%s", p->nome);
-
-    printf("Insira a prioridade do paciente");
-    scanf("%d", &(p->prioridade));
-
-    [*tam]++;
-    heap[*tam] = p;
-    InsereHeap(p,*tam);*/
+    printf("Usuário cadastrado com sucesso!\n");
+    return 1;
 }
 
 void ChamarPaciente(struct paciente *heap[], int *tam){
