@@ -10,7 +10,6 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     char nome[MAX];
     int prioridade;
 
-    printf('\n---Cadastro de Novo Paciente---\n');
     printf("Insira o nome do paciente\n");
     fgets(nome, MAX, stdin); //lê o nome
     nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
@@ -67,9 +66,6 @@ void ImprimirPacientes(struct paciente *heap[], int tam){
 
 void OrdenarPacientes(struct paciente *heap[], int tam){
     printf("Ordenando pacientes...\n");
-    int x;
-    x= ChecaHeap(heap, tam);
-
     int comparacoes=0, trocas=0;
 
     HeapSort(heap, tam, &comparacoes, &trocas);
