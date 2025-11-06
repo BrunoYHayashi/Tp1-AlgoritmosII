@@ -15,7 +15,14 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     fgets(nome, MAX, stdin); //lê o nome
     nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
 
-    printf("\nInsira a prioridade do paciente\n");
+    while(nome[0] == '\0'){ //Enquanto o usuário não mandar um usuário válido
+        printf("Nome do paciente em branco.\n");
+        printf("Insira o nome do paciente\n");
+        fgets(nome, MAX, stdin); //lê o nome
+        nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
+    } 
+
+    printf("\nInsira a prioridade do paciente (quanto maior o número, maior a prioridade)\n");
     scanf("%d", &prioridade);
 
     int c; //Serve para limpar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
