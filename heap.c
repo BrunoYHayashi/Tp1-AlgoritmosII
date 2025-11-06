@@ -39,21 +39,8 @@ struct paciente **InicHeap(int N, int *tam){
     return heap;
 }
 
-//Troca o ponteiro de dois pacientes
-void TrocaPacientes (struct paciente **a, struct paciente **b){
-    if(!a|| !*a || !b || !*b)
-        return;
-
-    struct paciente *pacienteTrocado;
-
-    pacienteTrocado= *a;
-
-    *a= *b;
-    *b= pacienteTrocado;
-}
-
 //Elemento inserido é colocado na última posição do vetor, é necessário atualizar o tamanho do tam após inserção
-void InsereHeap(struct paciente *heap[], int tam){
+void InsereHeap(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
     if(!heap)
         return;
 

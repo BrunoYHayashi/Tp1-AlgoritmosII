@@ -21,11 +21,8 @@ em caso de sucesso, retorna o ponteiro para ponteiro da heap
 */  
 struct paciente **InicHeap(int N, int *tam);
 
-/*Troca o ponteiro de dois pacientes*/
-void TrocaPacientes (struct paciente **a, struct paciente **b);
-
 /*essa funcao eh o insere heap para o heapfy*/
-void InsereHeap(struct paciente *heap[], int tam);
+void InsereHeap(struct paciente *heap[], int tam, int *comparacoes, int *trocas);
 
 /*insere novo elemento na heap e retorna 1 em caso de sucesso e 0 caso contrario*/
 int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N);
