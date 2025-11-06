@@ -27,8 +27,8 @@ void TrocaPacientes (struct paciente **a, struct paciente **b);
 /*essa funcao eh o insere heap para o heapfy*/
 void InsereHeap(struct paciente *heap[], int tam);
 
-/*insere novo elemento na heap e retorna 1 em caso de sucesso e 0 caso contrario*/
-int InsereNovoHeap(struct paciente *heap[], struct paciente *p, int tam);
+/*insere novo elemento na heap e retorna o ponteiro em caso de sucesso e NULL caso contrario*/
+struct paciente *InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N);
 
 /*
 remove um elemento da heap
@@ -49,6 +49,6 @@ void ImprimeHeap(struct paciente *heap[], int tam);
 void HeapSort(struct paciente *heap[], int N);
 
 /*altera a prioridade do paciente indicado pelo parametro nome[]*/
-int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam);
+void AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam);
 
 #endif

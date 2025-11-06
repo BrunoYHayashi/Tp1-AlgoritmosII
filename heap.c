@@ -6,7 +6,10 @@
 //sacode o heap, elemento de heap[1] percorre o heap até se encontrar. 
 //Essa versão do SacodeHeap é adaptada ao resto do código para sua reutilização
 void SacodeHeap (int i, int tam, struct paciente *heap[]){
-    int i=i*2; //aqui está a adaptação, "i" é passado como parâmetro
+    if(!heap)
+        return;
+
+    i=i*2; //aqui está a adaptação, "i" é passado como parâmetro
     struct paciente *AUX;
 
     while (i<=tam){
@@ -23,6 +26,9 @@ void SacodeHeap (int i, int tam, struct paciente *heap[]){
 
 //Aloca memória para o heap. 
 struct paciente **InicHeap(int N, int *tam){
+    if(!tam)
+        return NULL;
+
     struct paciente **heap;
     
     if(!(heap=malloc(sizeof (struct paciente*)* N+1)))
@@ -35,6 +41,9 @@ struct paciente **InicHeap(int N, int *tam){
 
 //Troca o ponteiro de dois pacientes
 void TrocaPacientes (struct paciente **a, struct paciente **b){
+    if(!a|| !*a || !b || !*b)
+        return;
+
     struct paciente *pacienteTrocado;
 
     pacienteTrocado= *a;
@@ -45,6 +54,9 @@ void TrocaPacientes (struct paciente **a, struct paciente **b){
 
 //Elemento inserido é colocado na última posição do vetor, é necessário atualizar o tamanho do tam após inserção
 void InsereHeap(struct paciente *heap[], int tam){
+    if(!heap)
+        return;
+
     int i=tam+1;
     struct paciente *AUX;
 
@@ -56,8 +68,33 @@ void InsereHeap(struct paciente *heap[], int tam){
     };
 }
 
-//Remove o primeiro paciente do heap
+struct paciente *InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N){
+    if(!heap||!tam)
+        return NULL;
+
+    if (*tam==N)
+        return NULL;
+    
+    struct paciente *NovoPaciente;
+
+    if (!(NovoPaciente=malloc(sizeof(struct paciente))))
+        return NULL;
+
+    strcpy(NovoPaciente->nome, NovoNome);
+    NovoPaciente->prioridade= NovaPrioridade;
+
+    *tam = *tam+1;
+    heap[*tam] = NovoPaciente;
+    InsereHeap(heap, *tam-1);
+
+    return NovoPaciente;
+}
+
+//Remove o primeiro paciente do heap, é necessário dar free no paciente depois
 struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
+    if(!heap||!tam)
+        return NULL;
+
     if (tam==0)
         return NULL;
 
@@ -76,6 +113,9 @@ struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
 
 //Heapfica um vetor através de InsereHeap
 void Heapfy(struct paciente *heap[], int N){
+    if(!heap)
+        return;
+
     int i;
     for (i=1; i<N; i++)
         InsereHeap (heap, i);
@@ -83,6 +123,9 @@ void Heapfy(struct paciente *heap[], int N){
 
 //Checa se o vetor é um heap
 int ChecaHeap(struct paciente *heap[], int tam){
+    if(!heap)
+        return;
+
     int i;
     for (i=tam; i>1; i--) 
         if (heap[i]->prioridade > heap[i/2]->prioridade)
@@ -92,6 +135,9 @@ int ChecaHeap(struct paciente *heap[], int tam){
 
 //Imprime o nome dos pacientes e sua prioridade
 void ImprimeHeap(struct paciente *heap[], int tam){
+    if(!heap)
+        return;
+
     int i;
     for (i=1; i<=tam; i++)
         printf("Paciente: %s, prioridade: %d \n", heap[i]->nome, heap[i]->prioridade);
@@ -99,6 +145,9 @@ void ImprimeHeap(struct paciente *heap[], int tam){
 
 //Ordena o heap
 void HeapSort(struct paciente *heap[], int N){
+    if(!heap)
+        return;
+
     int i;
     struct paciente *AUX;
 
@@ -112,7 +161,10 @@ void HeapSort(struct paciente *heap[], int N){
 }
 
 //Altera a prioridade de um paciente no heap
-int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
+void AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
+    if(!heap)
+        return;
+
     int i;
 
     i=1;
