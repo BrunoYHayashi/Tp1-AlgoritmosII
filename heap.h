@@ -1,6 +1,7 @@
 #ifndef Heap
 #define Heap
 
+/*Estrutura do paciente: nome e a prioridade*/
 struct paciente {
     char nome[50];
     int prioridade; //Max heap
