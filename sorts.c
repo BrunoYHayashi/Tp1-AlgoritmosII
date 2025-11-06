@@ -3,7 +3,7 @@
 
 #include "heap.h"
 
-int escolhePivo(int *heap[], int ini, int fim){
+int escolhePivo(int v[], int ini, int fim){
     int meio = (ini+fim)/2, aux;
 
     if(v[ini] > v[meio]){
@@ -27,23 +27,23 @@ int escolhePivo(int *heap[], int ini, int fim){
     return meio;
 }
 
-void Particao(struct paciente *heap[], int ini, int fim, int *pos_pivo, int *n_comp, int *n_trocas){
+void Particao(int v[], int ini, int fim, int *pos_pivo, int *n_comp, int *n_trocas){
     int i = ini +1, j = fim, pivo, aux;
-    pivo = escolhePivo(heap,ini,fim);
+    pivo = escolhePivo(v,ini,fim);
 
     while(i<j){
-        while(i<fim && heap[i]->prioridade <= pivo){
+        while(i<fim && v[i] <= pivo){
             i++;
             (*n_comp)++;
         }
-        while(j>ini && heap[j]->prioridad > pivo){
+        while(j>ini && v[j]> pivo){
             j--;
             (*n_comp)++;
         }
         if(i<j){
-            aux = heap[i];
-            heap[i] = heap[j]
-            heap[j] = aux;
+            aux = v[i];
+            v[i] = v[j];
+            v[j] = aux;
             (*n_trocas)++;
         }
     }
@@ -53,19 +53,18 @@ void Particao(struct paciente *heap[], int ini, int fim, int *pos_pivo, int *n_c
     (*n_trocas)++;
 }
 
-void QuickSort(struct paciente *heap[], int ini, int fim, *n_comp, *n_trocas){
+void QuickSort(int v[], int ini, int fim, int *n_comp, int *n_trocas){
     int pos_pivo;
     if(ini<fim){
-        Particao(heap,ini,fim,&pos_pivo,n_comp,n_trocas);
-        QuickSort(heap,ini,pos_pivo - 1, n_comp, n_trocas);
-        QuickSort(heap, pos_pivo+1, fim, n_comp, n_trocas);
+        Particao(v,ini,fim,&pos_pivo,n_comp,n_trocas);
+        QuickSort(v,ini,pos_pivo - 1, n_comp, n_trocas);
+        QuickSort(v, pos_pivo+1, fim, n_comp, n_trocas);
     }
     
 }
 
-void SelectSort(struct paciente *heap[], int tam, int *n_comp, int *n_trocas){
-    int i, j, menor, n_comp, n_trocas;
-
+void SelectSort(int v[], int tam, int *n_comp, int *n_trocas){
+    int i, j, menor, aux;   
     for(i=1;i<tam;i++){
         v[menor] = v[i];
         for(j=i+1;j<=tam;j++){
@@ -79,3 +78,8 @@ void SelectSort(struct paciente *heap[], int tam, int *n_comp, int *n_trocas){
         (*n_trocas)++;
     }
 }
+/*
+void HeapSort(int v[], int tam, int *n_comp, int *n_trocas){
+
+}
+*/
