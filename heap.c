@@ -95,10 +95,10 @@ int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade,
 
 //Remove o primeiro paciente do heap, é necessário dar free no paciente depois
 struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
-    if(!heap||!tam)
+    if(!heap||!tam||!heap[1])
         return NULL;
 
-    if (tam==0)
+    if (*tam==0)
         return NULL;
 
     int comp, trocas; //comp e trocas não utilizados
@@ -174,15 +174,13 @@ int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
     if(!heap)
         return 0;
 
-    int i;
+    int i=1;
 
-    i=1;
-
-    while (strcmp(nome, heap[i]->nome)!= 0 && i<=tam){
+    while ((heap[i])&&(strcmp(nome, heap[i]->nome)!= 0)){
         i++;
     }
 
-    if (i>tam)
+    if (!heap[i])
         return 0;
 
     if (heap[i]->prioridade < prioridade){

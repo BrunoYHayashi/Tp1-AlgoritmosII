@@ -55,6 +55,7 @@ void ChamarPaciente(struct paciente *heap[], int *tam){
 
     printf("Paciente: %s, de prioridade %d, removido da fila\n", pacienteRemovido->nome, pacienteRemovido->prioridade);
     free(pacienteRemovido);
+    pacienteRemovido=NULL;
 }
 
 void ImprimirPacientes(struct paciente *heap[], int tam){
