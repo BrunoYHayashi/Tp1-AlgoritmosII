@@ -10,12 +10,12 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     char nome[MAX];
     int prioridade;
 
-
-    printf("Insira o nome do paciente");
+    printf('\n---Cadastro de Novo Paciente---\n');
+    printf("Insira o nome do paciente\n");
     fgets(nome, MAX, stdin); //lê o nome
     nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
 
-    printf("Insira a prioridade do paciente");
+    printf("Insira a prioridade do paciente\n");
     scanf("%d", &prioridade);
 
     int c; //Serve para limpar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
@@ -34,10 +34,18 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
 }
 
 void ChamarPaciente(struct paciente *heap[], int *tam){
+    if(!heap||!tam)
+        return;
+
     struct paciente *pacienteRemovido;
 
     printf("Chamando próximo paciente...\n");
     pacienteRemovido= RemoveHeap(heap, tam);
+
+    if(pacienteRemovido==NULL){
+        printf("A fila está vazia");
+        return;
+    }
 
     printf("Paciente: %s, de prioridade %d, removido da fila\n", pacienteRemovido->nome, pacienteRemovido->prioridade);
     free(pacienteRemovido);
@@ -64,10 +72,6 @@ void OrdenarPacientes(struct paciente *heap[], int tam){
 
     int comparacoes=0, trocas=0;
 
-    if(!x){
-        Heapfy(heap, tam, &comparacoes, &trocas);
-    }
-
     HeapSort(heap, tam, &comparacoes, &trocas);
     printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas", comparacoes, trocas);
     
@@ -92,8 +96,10 @@ void AtualizarPrioridade(struct paciente *heap[], int tam){
 
     x= AlteraHeap(heap, nome, prioridade, tam);
 
-    if(!x)
+    if(!x){
         printf("Paciente não encontrado (não existe ou foi digitado errado)");
+        return;
+    }
     
     printf("Prioridade do paciente %s, alterada!", nome);
 }
@@ -106,16 +112,10 @@ void LiberaVetor(struct paciente *heap[], int tam){
     if(!heap)
         return;
 
-    struct paciente *atual;
-    int i=1;
+    int i;
 
-    atual= heap[1];
-
-    while(atual!=NULL && i<=tam){
-        free(atual);
-        i++;
-        atual= heap[i];
-    }
+    for(i=1;i<=tam;i++)
+        free(heap[i]);
 
     free(heap);
 }
@@ -140,6 +140,9 @@ int main(){
         printf("\n6.Comparar algoritmos de ordenacao");
         printf("\n7.Encerrar programa\n");
         scanf("%d",&operacao);
+
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
 
         switch(operacao){
             case 1:

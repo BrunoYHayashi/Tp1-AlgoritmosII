@@ -43,7 +43,7 @@ int ChecaHeap(struct paciente *heap[], int tam);
 void ImprimeHeap(struct paciente *heap[], int tam);
 
 /*ordena a heap utilizando o Heap Sort*/
-void HeapSort(struct paciente *heap[], int N, int *comparacoes, int *trocas);
+void HeapSort(struct paciente *heap[], int tam, int *comparacoes, int *trocas);
 
 /*
 altera a prioridade do paciente indicado pelo parametro nome[]. 

@@ -147,14 +147,20 @@ void ImprimeHeap(struct paciente *heap[], int tam){
 }
 
 //Ordena o heap
-void HeapSort(struct paciente *heap[], int N, int *comparacoes, int *trocas){
+void HeapSort(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
     if(!heap)
         return;
 
     int i;
+
+    *comparacoes=0;
+    *trocas=0;
+
+    Heapfy(heap, tam, comparacoes, trocas);
+
     struct paciente *AUX;
 
-    for (i=N; i>1; i--) {
+    for (i=tam; i>1; i--) {
         (*trocas)++;
         AUX= heap[1]; 
         heap[1] = heap[i];
