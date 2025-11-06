@@ -112,7 +112,7 @@ void AtualizarPrioridade(struct paciente *heap[], int tam){
 }
 
 void CompararSorts(){
-    int *v, *w, *z;
+    int *v, *w, *z; //3 vetores
     int min = -511, max = 512, i, tam = 1024, n_comp, n_trocas;
 
     if(!(v = malloc(sizeof(int) * (tam+1)))){
@@ -120,7 +120,7 @@ void CompararSorts(){
         return;
     }
 
-    for(i=1;i<=tam+1;i++){
+    for(i=1;i<=tam;i++){
         v[i] = min+rand()%(max-min+1); /*max-min+1 delimita o intervalo de -511 ate 512 e min+rand() garante que o intervalo comeca em -511*/
     }
 
@@ -140,19 +140,19 @@ void CompararSorts(){
     printf("\nOrdenando com Select Sort\n");
     n_comp = 0;
     n_trocas = 0;
-    SelectSort(v,tam+1,&n_comp,&n_trocas);
+    SelectSort(v,tam,&n_comp,&n_trocas);
     printf("Select Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
 
     printf("\nOrdenando com Quick Sort\n");
     n_comp = 0;
     n_trocas = 0;
-    QuickSort(w,1,tam+1,&n_comp,&n_trocas);
+    QuickSort(w,1,tam,&n_comp,&n_trocas);
     printf("Quick Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
 
     printf("\nOrdenando com Heap Sort\n");
     n_comp = 0;
     n_trocas = 0;
-    HeapSortInt(z,tam+1,&n_comp,&n_trocas);
+    HeapSortInt(z,tam,&n_comp,&n_trocas);
     printf("Heap Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
 
     int operacao;
@@ -170,7 +170,7 @@ void CompararSorts(){
     }
 
     printf("Vetor ordenado: ");
-    for(i=1;i<=tam+1;i++)
+    for(i=1;i<=tam;i++)
         printf("%3d ", v[i]);
 
     free(v);
