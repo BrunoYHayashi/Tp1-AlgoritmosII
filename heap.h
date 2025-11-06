@@ -6,9 +6,11 @@ struct paciente {
     int prioridade; //Max heap
 }; 
 
-/*Sacode o heap, elemento de heap[1] percorre o heap até se encontrar. 
+/*
+Sacode o heap, elemento de heap[1] percorre o heap até se encontrar. 
 Essa versão do SacodeHeap é adaptada ao resto do código para sua reutilização,
-por isso "i" é passado como parâmetro*/
+por isso "i" é passado como parâmetro
+*/
 void SacodeHeap (int i, int tam, struct paciente *heap[]);
 
 /*
