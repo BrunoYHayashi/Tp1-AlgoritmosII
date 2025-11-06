@@ -34,7 +34,7 @@ retorna o ponteiro para o paciente removido, em caso do vetor estar vazio, retor
 struct paciente *RemoveHeap(struct paciente *heap[], int *tam);
 
 /*transforma o vetor em uma heap*/
-void Heapfy(struct paciente *heap[], int tam);
+void Heapfy(struct paciente *heap[], int tam, int *comparacoes, int *trocas);
 
 /*retorna 0 se o vetor nao for heap e 1 em caso contrario*/
 int ChecaHeap(struct paciente *heap[], int tam);

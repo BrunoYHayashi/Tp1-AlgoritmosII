@@ -43,12 +43,15 @@ void ChamarPaciente(struct paciente *heap[], int *tam){
     free(pacienteRemovido);
 }
 
-void ImprimirPacientes(struct racional *heap[], int tam){
+void ImprimirPacientes(struct paciente *heap[], int tam){
     int x;
     x= ChecaHeap(heap,tam);
 
-    if(!x)
-        Heapfy(heap, tam);
+    if(!x){
+        int comparacoes=0, trocas=0;
+        Heapfy(heap, tam, &comparacoes, &trocas);
+        printf("Heapfy fez %d comparações e %d trocas", comparacoes, trocas);
+    }
 
     printf("Imprimindo pacientes:\n");
     ImprimeHeap(heap,tam);
@@ -59,11 +62,15 @@ void OrdenarPacientes(struct paciente *heap[], int tam){
     int x;
     x= ChecaHeap(heap, tam);
 
-    if(!x)
-        Heapfy(heap, tam);
-    
-    HeapSort(heap, tam);
+    int comparacoes=0, trocas=0;
 
+    if(!x){
+        Heapfy(heap, tam, &comparacoes, &trocas);
+    }
+
+    HeapSort(heap, tam, &comparacoes, &trocas);
+    printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas", &comparacoes, &trocas);
+    
     printf("Imprimindo pacientes ordenados:\n");
     ImprimeHeap(heap,tam);
 }

@@ -5,7 +5,7 @@
 
 //sacode o heap, elemento de heap[1] percorre o heap até se encontrar. 
 //Essa versão do SacodeHeap é adaptada ao resto do código para sua reutilização
-void SacodeHeap (int i, int tam, struct paciente *heap[]){
+void SacodeHeap (int i, int tam, struct paciente *heap[], int *comparacoes, int *trocas){
     if(!heap)
         return;
 
@@ -13,10 +13,17 @@ void SacodeHeap (int i, int tam, struct paciente *heap[]){
     struct paciente *AUX;
 
     while (i<=tam){
-        if ((i< tam) && (heap[i]->prioridade < heap[i+1]->prioridade))
-            i++;
+        if (i< tam){
+            (*comparacoes)++;
+            if((heap[i]->prioridade < heap[i+1]->prioridade))
+                i++;
+        }
+        
+        (*comparacoes)++;
         if (heap[i/2]->prioridade >= heap[i]->prioridade)
             break; //é heap
+        
+        (*trocas)++;
         AUX= heap[i/2];
         heap[i/2]= heap[i];
         heap[i]= AUX;
@@ -47,12 +54,20 @@ void InsereHeap(struct paciente *heap[], int tam, int *comparacoes, int *trocas)
     int i=tam+1;
     struct paciente *AUX;
 
-    while (i>1 && heap[i/2]->prioridade < heap[i]->prioridade){
-        AUX= heap[i/2];
-        heap[i/2]= heap[i];
-        heap[i] = AUX;
-        i= i/2;
-    };
+    while (i>1){
+        (*comparacoes)++;
+
+        if (heap[i/2]->prioridade < heap[i]->prioridade){
+            (*trocas)++;
+            AUX= heap[i/2];
+            heap[i/2]= heap[i];
+            heap[i] = AUX;
+            i= i/2;
+        }
+
+        else
+            break;
+    }
 }
 
 int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N){
@@ -63,6 +78,7 @@ int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade,
         return 0;
     
     struct paciente *NovoPaciente;
+    int comp, troc;
 
     if (!(NovoPaciente=malloc(sizeof(struct paciente))))
         return 0;
@@ -72,7 +88,7 @@ int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade,
 
     *tam = *tam+1;
     heap[*tam] = NovoPaciente;
-    InsereHeap(heap, *tam-1);
+    InsereHeap(heap, *tam-1, &comp, &troc);
 
     return 1;
 }
@@ -85,7 +101,7 @@ struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
     if (tam==0)
         return NULL;
 
-    int i;
+    int i, comp, trocas;
     struct paciente *pacienteRemovido;
 
     pacienteRemovido = heap[1];
@@ -93,19 +109,19 @@ struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
     heap[1] = heap[*tam];
     *tam = *tam-1;
 
-    SacodeHeap(1, *tam, heap);
+    SacodeHeap(1, *tam, heap, &comp, &trocas);
 
     return pacienteRemovido;
 }
 
 //Heapfica um vetor através de InsereHeap
-void Heapfy(struct paciente *heap[], int tam){
+void Heapfy(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
     if(!heap)
         return;
 
     int i;
     for (i=1; i<tam; i++)
-        InsereHeap (heap, i);
+        InsereHeap (heap, i, comparacoes, trocas);
 }
 
 //Checa se o vetor é um heap
@@ -131,7 +147,7 @@ void ImprimeHeap(struct paciente *heap[], int tam){
 }
 
 //Ordena o heap
-void HeapSort(struct paciente *heap[], int N){
+void HeapSort(struct paciente *heap[], int N, int *comparacoes, int *trocas){
     if(!heap)
         return;
 
@@ -139,10 +155,11 @@ void HeapSort(struct paciente *heap[], int N){
     struct paciente *AUX;
 
     for (i=N; i>1; i--) {
+        (*trocas)++;
         AUX= heap[1]; 
         heap[1] = heap[i];
         heap[i] = AUX;
-        SacodeHeap (1, i-1, heap);
+        SacodeHeap (1, i-1, heap, comparacoes, trocas);
     }
 }
 
@@ -163,13 +180,16 @@ int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
         return 0;
 
     if (heap[i]->prioridade < prioridade){
+        int comp, troc;
+
         heap[i]->prioridade = prioridade;
-        InsereHeap(heap, i-1);
+        InsereHeap(heap, i-1, &comp, &troc);
         return 1;
     }
     else{
+        int comp, troc;
         heap[i]->prioridade = prioridade;
-        SacodeHeap(i, tam, heap); //Motivo de SacodeHeap ser adaptado
+        SacodeHeap(i, tam, heap, &comp, &troc); //Motivo de SacodeHeap ser adaptado
         return 1;
     }
 
