@@ -10,6 +10,7 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     char nome[MAX];
     int prioridade;
 
+
     printf("Insira o nome do paciente");
     fgets(nome, MAX, stdin); //lê o nome
     nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
@@ -17,7 +18,7 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     printf("Insira a prioridade do paciente");
     scanf("%d", &prioridade);
 
-    int c; //Serve para limbar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
+    int c; //Serve para limpar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
     while ((c=getchar()) != '\n' && c != EOF);
 
     int sucesso;
@@ -33,23 +34,61 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
 }
 
 void ChamarPaciente(struct paciente *heap[], int *tam){
-    printf("removendo paciente %s de prioridade %d\n", heap[1]->nome, heap[1]->prioridade);
-    RemoveHeap(heap, tam);
+    struct paciente *pacienteRemovido;
 
-    printf("paciente removido");
+    printf("Chamando próximo paciente...\n");
+    pacienteRemovido= RemoveHeap(heap, tam);
+
+    printf("Paciente: %s, de prioridade %d, removido da fila\n", pacienteRemovido->nome, pacienteRemovido->prioridade);
+    free(pacienteRemovido);
 }
 
 void ImprimirPacientes(struct racional *heap[], int tam){
-    printf("Pacientes: ");
+    int x;
+    x= ChecaHeap(heap,tam);
+
+    if(!x)
+        Heapfy(heap, tam);
+
+    printf("Imprimindo pacientes:\n");
     ImprimeHeap(heap,tam);
 }
 
-void OrdenarPacientes(){
+void OrdenarPacientes(struct paciente *heap[], int tam){
+    printf("Ordenando pacientes...\n");
+    int x;
+    x= ChecaHeap(heap, tam);
 
+    if(!x)
+        Heapfy(heap, tam);
+    
+    HeapSort(heap, tam);
+
+    printf("Imprimindo pacientes ordenados:\n");
+    ImprimeHeap(heap,tam);
 }
 
-void AtualizarPrioridade(){
+void AtualizarPrioridade(struct racional *heap[], int tam){
+    char nome[50];
+    const int MAX=50;
+    int prioridade, x;
 
+    printf("Insira o nome do paciente que deseja alterar a prioridade\n");
+    fgets(nome, MAX, stdin); 
+    nome[strcspn(nome, "\n")] = 0;
+
+    printf("Insira a prioridade NOVA do paciente\n");
+    scanf("%d", &prioridade);
+
+    int c; 
+    while ((c=getchar()) != '\n' && c != EOF);
+
+    x= AlteraHeap(heap, nome, prioridade, tam);
+
+    if(!x)
+        printf("Paciente não encontrado (não existe ou foi digitado errado)");
+    
+    printf("Prioridade do paciente %s, alterada!", nome);
 }
 
 void CompararSorts(){
@@ -57,18 +96,20 @@ void CompararSorts(){
 }
 
 int main(){
-    int operacao, encerrar = 0, tam;
+    int operacao, encerrar = 0, tam; //tam= numero de pacientes no vetor
     struct paciente **heap;
+    const int MAX=1024; //tamanho máximo do vetor
 
-    InicHeap(heap);
-    tam = 0;
+    tam=0;
+
+    heap= InicHeap(MAX, &tam);
 
     do{
         printf("###################################################\n");
         printf("Insira o numero correspondente a operacao desejada\n");
         printf("\n1.Cadastrar novo paciente");
         printf("\n2.Chamar proximo paciente");
-        printf("\n3.Imprimir todos os pacientes");
+        printf("\n3.Imprimir todos os pacientes em heap");
         printf("\n4.Ordenar pacientes (ordem crescente de prioridade)");
         printf("\n5.Atualizar prioridade");
         printf("\n6.Comparar algoritmos de ordenacao");
@@ -77,7 +118,7 @@ int main(){
 
         switch(operacao){
             case 1:
-            CadastrarPaciente(heap,&tam);
+            CadastrarPaciente(heap,&tam, MAX);
             break;
 
             case 2:
@@ -85,15 +126,15 @@ int main(){
             break;
 
             case 3:
-            ImprimirPacientes();
+            ImprimirPacientes(heap, tam);
             break;
 
             case 4:
-            OrdenarPacientes();
+            OrdenarPacientes(heap, tam);
             break;
 
             case 5:
-            AtualizarPrioridade();
+            AtualizarPrioridade(heap, tam);
             break;
 
             case 6:
