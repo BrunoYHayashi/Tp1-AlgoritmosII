@@ -28,7 +28,7 @@ void TrocaPacientes (struct paciente **a, struct paciente **b);
 void InsereHeap(struct paciente *heap[], int tam);
 
 /*insere novo elemento na heap e retorna o ponteiro em caso de sucesso e NULL caso contrario*/
-struct paciente *InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N);
+int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N);
 
 /*
 remove um elemento da heap

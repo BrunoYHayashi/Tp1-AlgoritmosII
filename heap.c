@@ -68,17 +68,17 @@ void InsereHeap(struct paciente *heap[], int tam){
     };
 }
 
-struct paciente *InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N){
+int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N){
     if(!heap||!tam)
-        return NULL;
+        return 0;
 
     if (*tam==N)
-        return NULL;
+        return 0;
     
     struct paciente *NovoPaciente;
 
     if (!(NovoPaciente=malloc(sizeof(struct paciente))))
-        return NULL;
+        return 0;
 
     strcpy(NovoPaciente->nome, NovoNome);
     NovoPaciente->prioridade= NovaPrioridade;
@@ -87,7 +87,7 @@ struct paciente *InsereNovoHeap(struct paciente *heap[], char NovoNome[], int No
     heap[*tam] = NovoPaciente;
     InsereHeap(heap, *tam-1);
 
-    return NovoPaciente;
+    return 1;
 }
 
 //Remove o primeiro paciente do heap, é necessário dar free no paciente depois
