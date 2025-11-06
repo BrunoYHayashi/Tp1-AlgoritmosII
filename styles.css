@@ -1,16 +1,22 @@
 .autores {
-
+    font-weight: 700;
+    font-size: 20px;
 }
 
 .relatorio{
-
+    text-decoration: underline;
 }
 
 .datas{
-
+    color:darkgoldenrod
 }
 
 .configuracaoDescricao{
     margin-left: 20px;
     text-align: justify;
+    font-size: 15px
+}
+
+.links{
+    color:cornflowerblue
 }
