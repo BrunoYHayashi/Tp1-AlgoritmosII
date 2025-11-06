@@ -27,7 +27,7 @@ void TrocaPacientes (struct paciente **a, struct paciente **b);
 /*essa funcao eh o insere heap para o heapfy*/
 void InsereHeap(struct paciente *heap[], int tam);
 
-/*insere novo elemento na heap e retorna o ponteiro em caso de sucesso e NULL caso contrario*/
+/*insere novo elemento na heap e retorna 1 em caso de sucesso e 0 caso contrario*/
 int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N);
 
 /*
@@ -37,7 +37,7 @@ retorna o ponteiro para o paciente removido, em caso do vetor estar vazio, retor
 struct paciente *RemoveHeap(struct paciente *heap[], int *tam);
 
 /*transforma o vetor em uma heap*/
-void Heapfy(struct paciente *heap[], int N);
+void Heapfy(struct paciente *heap[], int tam);
 
 /*retorna 0 se o vetor nao for heap e 1 em caso contrario*/
 int ChecaHeap(struct paciente *heap[], int tam);
@@ -48,7 +48,10 @@ void ImprimeHeap(struct paciente *heap[], int tam);
 /*ordena a heap utilizando o Heap Sort*/
 void HeapSort(struct paciente *heap[], int N);
 
-/*altera a prioridade do paciente indicado pelo parametro nome[]*/
-void AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam);
+/*
+altera a prioridade do paciente indicado pelo parametro nome[]. 
+Retorna 1 em caso de sucesso e 0 caso contrário
+*/
+int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam);
 
 #endif

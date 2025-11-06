@@ -112,12 +112,12 @@ struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
 }
 
 //Heapfica um vetor através de InsereHeap
-void Heapfy(struct paciente *heap[], int N){
+void Heapfy(struct paciente *heap[], int tam){
     if(!heap)
         return;
 
     int i;
-    for (i=1; i<N; i++)
+    for (i=1; i<tam; i++)
         InsereHeap (heap, i);
 }
 
@@ -140,7 +140,7 @@ void ImprimeHeap(struct paciente *heap[], int tam){
 
     int i;
     for (i=1; i<=tam; i++)
-        printf("Paciente: %s, prioridade: %d \n", heap[i]->nome, heap[i]->prioridade);
+        printf("Paciente: %s, prioridade: %d\n", heap[i]->nome, heap[i]->prioridade);
 }
 
 //Ordena o heap
@@ -151,7 +151,6 @@ void HeapSort(struct paciente *heap[], int N){
     int i;
     struct paciente *AUX;
 
-    Heapfy(heap, N);
     for (i=N; i>1; i--) {
         AUX= heap[1]; 
         heap[1] = heap[i];
@@ -161,7 +160,7 @@ void HeapSort(struct paciente *heap[], int N){
 }
 
 //Altera a prioridade de um paciente no heap
-void AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
+int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
     if(!heap)
         return;
 
@@ -179,10 +178,12 @@ void AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
     if (heap[i]->prioridade < prioridade){
         heap[i]->prioridade = prioridade;
         InsereHeap(heap, i-1);
+        return 1;
     }
     else{
         heap[i]->prioridade = prioridade;
         SacodeHeap(i, tam, heap); //Motivo de SacodeHeap ser adaptado
+        return 1;
     }
 
 }
