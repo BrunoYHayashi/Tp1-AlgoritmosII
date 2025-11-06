@@ -69,13 +69,13 @@ void OrdenarPacientes(struct paciente *heap[], int tam){
     }
 
     HeapSort(heap, tam, &comparacoes, &trocas);
-    printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas", &comparacoes, &trocas);
+    printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas", comparacoes, trocas);
     
     printf("Imprimindo pacientes ordenados:\n");
     ImprimeHeap(heap,tam);
 }
 
-void AtualizarPrioridade(struct racional *heap[], int tam){
+void AtualizarPrioridade(struct paciente *heap[], int tam){
     char nome[50];
     const int MAX=50;
     int prioridade, x;

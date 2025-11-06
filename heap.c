@@ -78,7 +78,7 @@ int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade,
         return 0;
     
     struct paciente *NovoPaciente;
-    int comp, troc;
+    int comp, troc; //inteiros não utilizados
 
     if (!(NovoPaciente=malloc(sizeof(struct paciente))))
         return 0;
@@ -101,7 +101,7 @@ struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
     if (tam==0)
         return NULL;
 
-    int i, comp, trocas;
+    int comp, trocas; //comp e trocas não utilizados
     struct paciente *pacienteRemovido;
 
     pacienteRemovido = heap[1];
@@ -127,7 +127,7 @@ void Heapfy(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
 //Checa se o vetor é um heap
 int ChecaHeap(struct paciente *heap[], int tam){
     if(!heap)
-        return;
+        return 0;
 
     int i;
     for (i=tam; i>1; i--) 
@@ -166,7 +166,7 @@ void HeapSort(struct paciente *heap[], int N, int *comparacoes, int *trocas){
 //Altera a prioridade de um paciente no heap
 int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
     if(!heap)
-        return;
+        return 0;
 
     int i;
 
@@ -180,14 +180,14 @@ int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
         return 0;
 
     if (heap[i]->prioridade < prioridade){
-        int comp, troc;
+        int comp, troc; //não utilizados
 
         heap[i]->prioridade = prioridade;
         InsereHeap(heap, i-1, &comp, &troc);
         return 1;
     }
     else{
-        int comp, troc;
+        int comp, troc; //não utilizados
         heap[i]->prioridade = prioridade;
         SacodeHeap(i, tam, heap, &comp, &troc); //Motivo de SacodeHeap ser adaptado
         return 1;
