@@ -12,7 +12,7 @@ Sacode o heap, elemento de heap[1] percorre o heap até se encontrar.
 Essa versão do SacodeHeap é adaptada ao resto do código para sua reutilização,
 por isso "i" é passado como parâmetro
 */
-void SacodeHeap (int i, int tam, struct paciente *heap[]);
+void SacodeHeap (int i, int tam, struct paciente *heap[], int *comparacoes, int *trocas);
 
 /*
 Tenta alocar a heap
@@ -43,7 +43,7 @@ int ChecaHeap(struct paciente *heap[], int tam);
 void ImprimeHeap(struct paciente *heap[], int tam);
 
 /*ordena a heap utilizando o Heap Sort*/
-void HeapSort(struct paciente *heap[], int N);
+void HeapSort(struct paciente *heap[], int N, int *comparacoes, int *trocas);
 
 /*
 altera a prioridade do paciente indicado pelo parametro nome[]. 
