@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "heap.h"
 #include "sorts.h"
@@ -10,11 +11,11 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     char nome[MAX];
     int prioridade;
 
-    printf("Insira o nome do paciente\n");
+    printf("\nInsira o nome do paciente\n");
     fgets(nome, MAX, stdin); //lê o nome
     nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
 
-    printf("Insira a prioridade do paciente\n");
+    printf("\nInsira a prioridade do paciente\n");
     scanf("%d", &prioridade);
 
     int c; //Serve para limpar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
@@ -24,11 +25,11 @@ int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
     sucesso = InsereNovoHeap(heap, nome, prioridade, tam, N);
 
     if (!sucesso) {
-        printf("Falha ao cadastrar paciente, heap cheio ou memória insuficiente.\n");
+        printf("\nFalha ao cadastrar paciente, heap cheio ou memória insuficiente.\n");
         return 0;
     }
 
-    printf("Usuário cadastrado com sucesso!\n");
+    printf("\nUsuário cadastrado com sucesso!\n");
     return 1;
 }
 
@@ -38,11 +39,11 @@ void ChamarPaciente(struct paciente *heap[], int *tam){
 
     struct paciente *pacienteRemovido;
 
-    printf("Chamando próximo paciente...\n");
+    printf("\nChamando próximo paciente...\n");
     pacienteRemovido= RemoveHeap(heap, tam);
 
     if(pacienteRemovido==NULL){
-        printf("A fila está vazia");
+        printf("\nA fila está vazia");
         return;
     }
 
@@ -51,28 +52,30 @@ void ChamarPaciente(struct paciente *heap[], int *tam){
 }
 
 void ImprimirPacientes(struct paciente *heap[], int tam){
-    int x;
-    x= ChecaHeap(heap,tam);
-
-    if(!x){
+    if(!ChecaHeap(heap,tam)){
         int comparacoes=0, trocas=0;
         Heapfy(heap, tam, &comparacoes, &trocas);
-        printf("Heapfy fez %d comparações e %d trocas\n", comparacoes, trocas);
+        printf("\nHeapfy fez %d comparações e %d trocas\n", comparacoes, trocas);
     }
 
-    printf("Imprimindo pacientes:\n");
+    printf("\nImprimindo pacientes:\n");
     ImprimeHeap(heap,tam);
 }
 
 void OrdenarPacientes(struct paciente *heap[], int tam){
-    printf("Ordenando pacientes...\n");
+    printf("\nOrdenando pacientes...\n");
     int comparacoes=0, trocas=0;
 
     HeapSort(heap, tam, &comparacoes, &trocas);
-    printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas\n", comparacoes, trocas);
+    printf("\nHeapSort fez %d comparações e %d trocas\n", comparacoes, trocas);
     
-    printf("Imprimindo pacientes ordenados:\n");
+    printf("\nImprimindo pacientes ordenados:\n");
     ImprimeHeap(heap,tam);
+
+    comparacoes = 0;
+    trocas = 0;
+    Heapfy(heap,tam, &comparacoes, &trocas);
+    printf("\nHeapfy fez %d comparações e %d trocas para voltar o vetor a um heap\n", comparacoes, trocas);
 }
 
 void AtualizarPrioridade(struct paciente *heap[], int tam){
@@ -80,11 +83,11 @@ void AtualizarPrioridade(struct paciente *heap[], int tam){
     const int MAX=50;
     int prioridade, x;
 
-    printf("Insira o nome do paciente que deseja alterar a prioridade\n");
+    printf("\nInsira o nome do paciente que deseja alterar a prioridade\n");
     fgets(nome, MAX, stdin); 
     nome[strcspn(nome, "\n")] = 0;
 
-    printf("Insira a prioridade NOVA do paciente\n");
+    printf("\nInsira a prioridade NOVA do paciente\n");
     scanf("%d", &prioridade);
 
     int c; 
@@ -93,15 +96,70 @@ void AtualizarPrioridade(struct paciente *heap[], int tam){
     x= AlteraHeap(heap, nome, prioridade, tam);
 
     if(!x){
-        printf("Paciente não encontrado (não existe ou foi digitado errado)");
+        printf("\nPaciente não encontrado (não existe ou foi digitado errado)");
         return;
     }
     
-    printf("Prioridade do paciente %s, alterada!", nome);
+    printf("\nPrioridade do paciente %s, alterada!", nome);
 }
 
 void CompararSorts(){
+    int *v, *w, *z;
+    int min = -511, max = 512, i, tam = 1024, n_comp, n_trocas;
 
+    if(!(v = malloc(sizeof(int) * (tam+1)))){
+        printf("n\nao foi possivel alocar o vetor");
+        return;
+    }
+
+    for(i=1;i<=tam+1;i++){
+        v[i] = min+rand()%(max-min+1); /*max-min+1 delimita o intervalo de -511 ate 512 e min+rand() garante que o intervalo comeca em -511*/
+    }
+
+    if(!(w = malloc(sizeof(int) * (tam+1)))){
+        printf("\nnao foi possivel alocar o vetor");
+        return;
+    } 
+    
+    if(!(z = malloc(sizeof(int) * (tam+1)))){
+        printf("\nnao foi possivel alocar o vetor");
+        return;
+    } 
+
+    memcpy(w, v, sizeof(int) * (tam+1)); /*copia o vetor v em w*/
+    memcpy(z, v, sizeof(int) * (tam+1)); /*copia o vetor v em z*/
+
+    printf("\nOrdenando com Select Sort\n");
+    n_comp = 0;
+    n_trocas = 0;
+    SelectSort(v,tam+1,&n_comp,&n_trocas);
+    printf("Select Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
+
+    printf("\nOrdenando com Quick Sort\n");
+    n_comp = 0;
+    n_trocas = 0;
+    QuickSort(w,1,tam+1,&n_comp,&n_trocas);
+    printf("Quick Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
+
+    printf("\nOrdenando com Heap Sort\n");
+    n_comp = 0;
+    n_trocas = 0;
+    HeapSortInt(z,tam+1,&n_comp,&n_trocas);
+    printf("Heap Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
+
+    int operacao;
+
+    printf("\nInsira 1 para imprimir o vetor ordenado\n");
+    printf("Insira 0 para sair");
+
+    scanf("%d", &operacao);
+
+    if(operacao == 0)
+        return;
+
+    printf("Vetor ordenado: ");
+    for(i=1;i<=tam+1;i++)
+        printf("%3d ", v[i]);
 }
 
 void LiberaVetor(struct paciente *heap[], int tam){
@@ -121,12 +179,14 @@ int main(){
     struct paciente **heap;
     const int MAX=1024; //tamanho máximo do vetor
 
+    srand(0);
+
     tam=0;
 
     heap= InicHeap(MAX, &tam);
 
     do{
-        printf("###################################################\n");
+        printf("\n###################################################\n");
         printf("Insira o numero correspondente a operacao desejada\n");
         printf("\n1.Cadastrar novo paciente");
         printf("\n2.Chamar proximo paciente");
@@ -135,6 +195,7 @@ int main(){
         printf("\n5.Atualizar prioridade");
         printf("\n6.Comparar algoritmos de ordenacao");
         printf("\n7.Encerrar programa\n");
+        printf("###################################################\n");
         scanf("%d",&operacao);
 
         int c;

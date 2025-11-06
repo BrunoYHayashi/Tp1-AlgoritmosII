@@ -156,7 +156,8 @@ void HeapSort(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
     *comparacoes=0;
     *trocas=0;
 
-    Heapfy(heap, tam, comparacoes, trocas);
+    if(!ChecaHeap(heap,tam))
+        Heapfy(heap, tam, comparacoes, trocas);
 
     struct paciente *AUX;
 
