@@ -157,16 +157,24 @@ void CompararSorts(){
     int operacao;
 
     printf("\nInsira 1 para imprimir o vetor ordenado\n");
-    printf("Insira 0 para sair");
+    printf("Insira 0 para sair\n");
 
     scanf("%d", &operacao);
 
-    if(operacao == 0)
+    if(operacao == 0){
+        free(v);
+        free(w);
+        free(z);
         return;
+    }
 
     printf("Vetor ordenado: ");
     for(i=1;i<=tam+1;i++)
         printf("%3d ", v[i]);
+
+    free(v);
+    free(w);
+    free(z);
 }
 
 void LiberaVetor(struct paciente *heap[], int tam){
@@ -193,7 +201,7 @@ int main(){
     heap= InicHeap(MAX, &tam);
 
     do{
-        printf("\n###################################################\n");
+        printf("\n========================================================================\n");
         printf("Insira o numero correspondente a operacao desejada\n");
         printf("\n1.Cadastrar novo paciente");
         printf("\n2.Chamar proximo paciente");
@@ -202,7 +210,7 @@ int main(){
         printf("\n5.Atualizar prioridade");
         printf("\n6.Comparar algoritmos de ordenacao");
         printf("\n7.Encerrar programa\n");
-        printf("###################################################\n");
+        printf("\n========================================================================\n");
         scanf("%d",&operacao);
 
         int c;
