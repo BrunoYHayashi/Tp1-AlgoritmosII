@@ -57,7 +57,7 @@ void ImprimirPacientes(struct paciente *heap[], int tam){
     if(!x){
         int comparacoes=0, trocas=0;
         Heapfy(heap, tam, &comparacoes, &trocas);
-        printf("Heapfy fez %d comparações e %d trocas", comparacoes, trocas);
+        printf("Heapfy fez %d comparações e %d trocas\n", comparacoes, trocas);
     }
 
     printf("Imprimindo pacientes:\n");
@@ -69,7 +69,7 @@ void OrdenarPacientes(struct paciente *heap[], int tam){
     int comparacoes=0, trocas=0;
 
     HeapSort(heap, tam, &comparacoes, &trocas);
-    printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas", comparacoes, trocas);
+    printf("Heapfy e HeapSort juntos fizeram %d comparações e %d trocas\n", comparacoes, trocas);
     
     printf("Imprimindo pacientes ordenados:\n");
     ImprimeHeap(heap,tam);
