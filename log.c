@@ -7,14 +7,31 @@
 #define MAX 5
 
 void HeapInsere(struct paciente *heap[], char nome[], int prio, int *tam, int max){
+    int i;
+
+    if(!heap){
+        printf("\nErro ao inserir, heap nao existe\n");
+        return;
+    }
 
     if(*tam+1 > max){
-        printf("\nimpossivel inserir o paciente %s de prioridade %d na heap, heap esta cheia", nome,prio);
+        printf("\nErro, impossivel inserir o paciente %s de prioridade %d na heap, heap esta cheia", nome,prio);
+        return;
+    }
+
+    for(i=1;i<=*tam;i++)
+        if(strcmp(nome,heap[i]->nome) == 0){
+            printf("\nErro, nao foi possivel inserir o paciente %s, nome repetido",nome);
+            return;
+        }
+
+    if(nome[0] == '\0'){
+        printf("\nErro, nao foi possivel inserir, nome nulo");
         return;
     }
 
     if(!InsereNovoHeap(heap,nome,prio,tam,max)){
-        printf("\nerro ao alocar paciente");
+        printf("\nErro ao alocar paciente");
         return;
     }
 
@@ -22,27 +39,47 @@ void HeapInsere(struct paciente *heap[], char nome[], int prio, int *tam, int ma
 }
 
 void HeapAtualiza(struct paciente *heap[], char nome[], int prio, int tam){
-    if(!AlteraHeap(heap,nome,prio,tam)){
-        printf("Nao foi possivel alterar a prioridade - paciente nao existe ou heap nao existe");
+    if(!heap){
+        printf("\nErro ao alterar prioridade, heap nao existe");
         return;
     }
+
+    if(!AlteraHeap(heap,nome,prio,tam)){
+        printf("Erro, paciente nao existe");
+        return;
+    }
+
     printf("Prioridade do paciente %s alterada para %d com sucesso", nome,prio);
 }
 
-void HeapOrdena(struct paciente *heap[], int tam){
+int HeapOrdena(struct paciente *heap[], int tam){
     int n_comp = 0, n_trocas = 0;
+
+    if(!heap){
+        printf("Erro ao ordenar, heap nao existe\n");
+        return 0;
+    }
 
     HeapSort(heap,tam,&n_comp,&n_trocas);
     printf("Heap Sort fez %d comparacoes e %d trocas", n_comp, n_trocas);
+   
+    return 1;
 }
 
 void HeapRemove(struct paciente *heap[], int *tam){
     struct paciente *p;
 
-    if(!(p = RemoveHeap(heap,tam))){
-        printf("nao foi possivel remover o paciente - heap esta vazia ou nao existe");
+    if(!heap){
+        printf("\nErro ao remover, heap nao existe\n");
         return;
     }
+
+    if(*tam == 0){
+        printf("Erro ao remover, heap esta vazia");
+        return;
+    }
+
+    p = RemoveHeap(heap,tam);
 
     printf("Paciente %s de prioridade %d foi removido do heap",p->nome,p->prioridade);
     free(p);
@@ -98,6 +135,23 @@ int main(){
     ImprimeHeap(heap,tam);
     printf("\n");
 
+    printf("tenta inserir um nome repetido\n");
+    strcpy(nome, "Marchiorato");
+    prio = 4;
+    HeapInsere(heap,nome,prio,&tam,MAX);
+    printf("\nVeja a HEAP:\n");
+    ImprimeHeap(heap,tam);
+    printf("\n");
+
+    printf("tenta inserir um nome nulo\n");
+    strcpy(nome, "");
+    prio = 4;
+    HeapInsere(heap,nome,prio,&tam,MAX);
+    printf("\nVeja a HEAP:\n");
+    ImprimeHeap(heap,tam);
+    printf("\n");
+
+
     strcpy(nome, "Kedlin");
     prio = 1;
     HeapInsere(heap,nome,prio,&tam,MAX);
@@ -133,10 +187,11 @@ int main(){
     printf("\n");
 
     printf("Ordena Heap em ordem crescente de prioridade\n");
-    HeapOrdena(heap,tam);
-    printf("\nVeja a HEAP ORDENADA: \n");
-    ImprimeHeap(heap,tam);
-    printf("\n");
+    if(HeapOrdena(heap,tam)){
+        printf("\nVeja a HEAP ORDENADA: \n");
+        ImprimeHeap(heap,tam);
+        printf("\n");
+    }
 
     printf("Volta o vetor a uma Heap\n");
     Heapfy(heap,tam,&n_comp,&n_trocas);
@@ -160,7 +215,27 @@ int main(){
     if(tam == 0)
         printf("Heap vazia\n");
 
+    printf("\nLiberando Heap\n");
     free(heap);
+    heap = NULL;
+
+    printf("\nTentando Inserir na heap que nao existe");
+    HeapInsere(heap,nome,prio,&tam,MAX);
+
+    printf("\nTentando remover da heap que nao existe");
+    HeapRemove(heap,&tam);
+
+    printf("\nTentando atualizar prioridade de um paciente da heap que nao existe");
+    HeapAtualiza(heap,nome,prio,tam);
+    printf("\n");
+
+    printf("\nTentando ordenar Heap que nao existe em ordem crescente de prioridade\n");
+    if(HeapOrdena(heap,tam)){
+        printf("\nVeja a HEAP ORDENADA: \n");
+        ImprimeHeap(heap,tam);
+        printf("\n");
+    }
+
     printf("\nFim do programa de teste\n");
 
     return 0;
