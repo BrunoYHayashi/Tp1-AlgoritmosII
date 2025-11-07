@@ -67,7 +67,8 @@ void ImprimirPacientes(struct paciente *heap[], int tam){
     }
 
     printf("\nImprimindo pacientes:\n");
-    ImprimeHeap(heap,tam);
+    if (!ImprimeHeap(heap,tam))
+        printf("\nHeap vazio\n");
 }
 
 void OrdenarPacientes(struct paciente *heap[], int tam){

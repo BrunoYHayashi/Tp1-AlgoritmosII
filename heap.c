@@ -106,7 +106,10 @@ struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
 
     pacienteRemovido = heap[1];
 
-    heap[1] = heap[*tam];
+    if (*tam != 1)
+        heap[1] = heap[*tam];
+    else
+        heap[1]=NULL;
     *tam = *tam-1;
 
     SacodeHeap(1, *tam, heap, &comp, &trocas);
@@ -137,13 +140,17 @@ int ChecaHeap(struct paciente *heap[], int tam){
 }
 
 //Imprime o nome dos pacientes e sua prioridade
-void ImprimeHeap(struct paciente *heap[], int tam){
-    if(!heap)
-        return;
+int ImprimeHeap(struct paciente *heap[], int tam){
+    int j=1;
+    
+    if(!heap || !heap[j])
+        return 0;
 
     int i;
     for (i=1; i<=tam; i++)
         printf("Paciente: %s, prioridade: %d\n", heap[i]->nome, heap[i]->prioridade);
+    return 1;
+
 }
 
 //Ordena o heap

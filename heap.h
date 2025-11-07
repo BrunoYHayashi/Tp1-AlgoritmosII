@@ -40,7 +40,7 @@ void Heapfy(struct paciente *heap[], int tam, int *comparacoes, int *trocas);
 int ChecaHeap(struct paciente *heap[], int tam);
 
 /*imprime os elementos da heap*/
-void ImprimeHeap(struct paciente *heap[], int tam);
+int ImprimeHeap(struct paciente *heap[], int tam);
 
 /*ordena a heap utilizando o Heap Sort*/
 void HeapSort(struct paciente *heap[], int tam, int *comparacoes, int *trocas);
