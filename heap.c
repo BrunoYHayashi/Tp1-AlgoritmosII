@@ -177,11 +177,11 @@ int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
 
     int i=1;
 
-    while ((heap[i])&&(strcmp(nome, heap[i]->nome)!= 0)){
+    while ((i<=tam)&&(heap[i])&&(strcmp(nome, heap[i]->nome)!= 0)){
         i++;
     }
 
-    if (!heap[i])
+    if (i> tam || !heap[i])
         return 0;
 
     if (heap[i]->prioridade < prioridade){
