@@ -1,5 +1,6 @@
-### LUIZ GUILHERME DE SOUZA MO
-Eu fiz grande parte das funções de main. Deixei o relatório, log e as comparações dos sorts para você. 
+### ACESSO
+Atualmente, o trabalho está disponível para ser visualizado em 
+www.inf.ufpr.br/byh25/tpAlg
 
 # Tp1-AlgoritmosII
 Trabalho 1 da disciplina de algorítmos II em dupla.
