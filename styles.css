@@ -35,3 +35,10 @@
     font-size: 20px;
     color:cornflowerblue
 }
+
+.trio{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 5%;
+    margin-right: 60%;
+}
