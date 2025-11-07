@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparações</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <a href="/index.html" class="links">Voltar para a página anterior</a><br><br>
+    <h1>Algoritmos de comparação</h1>
+    <div class="legenda">Descrição da funcionalidade</div>
+    <div class="configuracaoDescricao">
+        A funcionalidade compara 3 algoritmos de ordenação:<br>
+        ->SelectSort;<br>
+        ->QuickSort;<br>
+        ->HeapSort;<br>
+        Um vetor de 1024 inteiros é preenchido por números aleatórios a cada vez que a funcionalidade é chamada. Para cada vetor, cada algoritmo faz a ordenação e imprime as trocas e as comparações realizadas. Após alguns testes, um fenômeno que foi possível observar foi qual algoritmo se sai melhor nas comparações e qual se sai melhor nas trocas. <br><br>
+        Para um vetor com 1024 elementos, notou-se que o QuickSort sempre se sai melhor nas comparações, seguido do HeapSort e por fim do SelectSort, o que é um resultado inesperado, visto que em tese, o heapsort é mais consistente do que os outros, fazendo para todos os casos (melhor, médio e pior) N*logN, enquanto o QuickSort no melhor e médio caso (N*logN) porém no pior (N²). Uma explicação levantada pela dupla, é que mesmo tendo um bom desempenho constante, devido ao grande número de elementos, as operações internas elevam o número de comparações. <br><br>
+        No entanto para as trocas, o algoritmo que se saiu melhor foi o SelectSort, que faz N trocas em todas as ocasiões; seguido dele, novamente QuickSort é mais eficiente do que o HeapSort. Inesperado de novo, visto que as trocas do QuickSort seguem o mesmo formato das comparações e as do Heap também. <br><br>
+        A conclusão pensada pela dupla, é que todos os algoritmos possuem seus pontos fortes e fracos, estabelecendo uma relação de "ganho e perda" entre eles, o que pode indicar que cada um é melhor para certas ocasiões. Mas o inegável é que o QuickSort obteve o melhor desempenho entre os 3, tendo o melhor número de comparações e o 2 melhor número de trocas, explicando portanto, o maior uso dos algoritmos QuickSort nos códigos em geral.
+    </div>
+
+    <br>
+    <br>
+    <div class="legenda">Ilustração entre dois vetores completamente diferentes de 1024 elementoos</div>
+    <img src="/assets/ComparaDupla.png" class="image">
+</body>
+</html>

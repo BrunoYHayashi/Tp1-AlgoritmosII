@@ -14,7 +14,8 @@
 .configuracaoDescricao{
     margin-left: 20px;
     width: 80%;
-    font-size: 15px
+    font-size: 15px;
+    text-align:justify;
 }
 
 .links{
@@ -28,4 +29,9 @@
 .legenda{
     font-size: 20px;
     text-decoration: underline;
+}
+
+.linkGrande{
+    font-size: 20px;
+    color:cornflowerblue
 }
