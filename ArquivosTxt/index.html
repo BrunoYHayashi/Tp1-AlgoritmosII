@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquivos .c</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <a href="/index.html" class="links">Voltar para a página anterior</a><br><br>
+    <h1>Os arquivos.c e .h</h1>
+    <div class="trio">
+        <a href="/ArquivosTxt/heap.h.txt" class="linkGrande">heap.h</a>
+        <a href="/ArquivosTxt/heap.c.txt" class="linkGrande">heap.c</a>
+        <a href="/ArquivosTxt/log.c.txt" class="linkGrande">log.c</a>
+    </div>
+    <br><br>
+    <div class="trio">
+        <a href="/ArquivosTxt/sorts.h.txt" class="linkGrande">sorts.h</a>
+        <a href="/ArquivosTxt/sorts.c.txt" class="linkGrande">sorts.c</a>
+        <a href="/ArquivosTxt/main.c.txt" class="linkGrande">main.c</a>
+    </div>
+    <br><br>
+    <div class="trio">
+        <a href="/ArquivosTxt/makefile.txt" class="linkGrande">makefile</a>
+    </div><br><br>
+
+    <div class="legenda">
+        Funções e operações implementadas em heap.c
+    </div>
+
+    <span class="datas">SacodeHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            void SacodeHeap (int i, int tam, struct paciente *heap[], int *comparacoes, int *trocas){
+                if(!heap)
+                    return;
+
+                i=i*2; //aqui está a adaptação, "i" é passado como parâmetro
+                struct paciente *AUX;
+
+                while (i<=tam){
+                    if (i< tam){
+                        (*comparacoes)++;
+                        if((heap[i]->prioridade < heap[i+1]->prioridade))
+                            i++;
+                    }
+                    
+                    (*comparacoes)++;
+                    if (heap[i/2]->prioridade >= heap[i]->prioridade)
+                        break; //é heap
+                    
+                    (*trocas)++;
+                    AUX= heap[i/2];
+                    heap[i/2]= heap[i];
+                    heap[i]= AUX;
+                    i=i*2;
+                }
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função restaura a propriedade heap de uma árvore a partir de um elemento (heap[i]). Ela testa "os galhos" de heap[i] e verifica se um de seus galhos possui prioridade maior que a dele, se sim, são trocados, e após a troca, se nessa nova posição, houver galhos, o processo se repete até que o elemento esteja no lugar correto.
+    </div><br><br><br>
+
+    <span class="datas">InicHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            struct paciente **InicHeap(int N, int *tam){
+                if(!tam)
+                    return NULL;
+
+                struct paciente **heap;
+                
+                if(!(heap=malloc(sizeof (struct paciente*)* (N+1))))
+                    return NULL;
+
+                *tam = 0;
+                    
+                return heap;
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função tenta a alocação de memória para um vetor de N ponteiros para structs paciente. Em caso de sucesso retorna o ponteiro para o vetor, caso contrário, retorna NULL.
+    </div><br><br><br>
+
+    <span class="datas">InsereHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            void InsereHeap(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
+                if(!heap)
+                    return;
+
+                int i=tam+1;
+                struct paciente *AUX;
+
+                while (i>1){
+                    (*comparacoes)++;
+
+                    if (heap[i/2]->prioridade < heap[i]->prioridade){
+                        (*trocas)++;
+                        AUX= heap[i/2];
+                        heap[i/2]= heap[i];
+                        heap[i] = AUX;
+                        i= i/2;
+                    }
+
+                    else
+                        break;
+                }
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função recebe o heap com o elemento "a ser inserido no heap" na última posição do vetor, e o tamanho passado como parâmetro é "tam-1", de forma que dentro da função tam+1 seja o "novo elemento". Como o elemento está na última posição do vetor, é comparado a prioridade dele com a prioridade do elemento o qual "ele é galho"(heap[i/2]), e se for maior, troca com com ele. O processo se repete até que a prioridade do novo elemento seja menor do que a da "base" (heap[i/2])
+    </div><br><br><br>
+
+    <span class="datas">InsereNovoHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            int InsereNovoHeap(struct paciente *heap[], char NovoNome[], int NovaPrioridade, int *tam, int N){
+                if(!heap||!tam)
+                    return 0;
+
+                if (*tam==N)
+                    return 0;
+                
+                struct paciente *NovoPaciente;
+                int comp, troc; //inteiros não utilizados
+
+                if (!(NovoPaciente=malloc(sizeof(struct paciente))))
+                    return 0;
+
+                strcpy(NovoPaciente->nome, NovoNome);
+                NovoPaciente->prioridade= NovaPrioridade;
+
+                *tam = *tam+1;
+                heap[*tam] = NovoPaciente;
+                InsereHeap(heap, *tam-1, &comp, &troc);
+
+                return 1;
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função recebe como parâmetro um nome e uma prioridade. Tenta alocar uma memória de struct paciente para receber o nome e a prioridade. O ponteiro para essa struct é inserida na última posição do vetor e é chamado InsereHeap. Retorna 1 em sucesso e 0 caso contrário.
+    </div><br><br><br>
+
+    <span class="datas">RemoveHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            struct paciente *RemoveHeap(struct paciente *heap[], int *tam){
+                if(!heap||!tam||!heap[1])
+                    return NULL;
+
+                if (*tam==0)
+                    return NULL;
+
+                int comp, trocas; //comp e trocas não utilizados
+                struct paciente *pacienteRemovido;
+
+                pacienteRemovido = heap[1];
+
+                if (*tam != 1)
+                    heap[1] = heap[*tam];
+                else
+                    heap[1]=NULL;
+                *tam = *tam-1;
+
+                SacodeHeap(1, *tam, heap, &comp, &trocas);
+
+                return pacienteRemovido;
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função cria um ponteiro para uma struct paciente para guardar o ponteiro do paciente removido. Verifica se o heap tem mais de um elemento, se tem, heap[1] (guarda o ponteiro do paciente removido) troca de ponteiro com o ponteiro do último elemento do vetor e o tamanho diminui 1, tornando esse paciente inacessível no vetor e quando o tamanho aumentar novamente, o paciente já é sobrescrevido. Se o heap tem apenas 1 elemento, o ponteiro que heap[1] guarda se torna NULL. Após esse processo, SacodeHeap é chamado para a árvore voltar a ser heap. Retorna o ponteiro do paciente removido para realizar as outras operações em caso de sucesso e NULL caso contrário.
+    </div><br><br><br>
+
+    <span class="datas">Heapfy</span><br>
+    <div class="codigo">
+        <pre><code>
+            void Heapfy(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
+                if(!heap)
+                    return;
+
+                int i;
+                for (i=1; i&lt;tam; i++)
+                    InsereHeap (heap, i, comparacoes, trocas);
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função heapfica um vetor. Começando em heap[1], o tamanho vai aumentando aos poucos e para cada "tamanho" aumentado, o elemento "que surgiu" desse aumento, chama a função InsereHeap.
+    </div><br><br><br>
+
+    <span class="datas">ChecaHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            int ChecaHeap(struct paciente *heap[], int tam){
+                if(!heap)
+                    return 0;
+
+                int i;
+                for (i=tam; i>1; i--) 
+                    if (heap[i]->prioridade > heap[i/2]->prioridade)
+                        return 0;
+                return 1;  
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função verifica para todo elemento de heap se ele está posicionado corretamente no heap. Retorna 1 no caso de ser heap e 0 se não for.
+    </div><br><br><br>
+
+    <span class="datas">ImprimeHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            int ImprimeHeap(struct paciente *heap[], int tam){
+                int j=1;
+                
+                if(!heap || !heap[j])
+                    return 0;
+
+                int i;
+                for (i=1; i<=tam; i++)
+                    printf("Paciente: %s, prioridade: %d\n", heap[i]->nome, heap[i]->prioridade);
+                return 1;
+
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função passas pelo vetor inteiro imprimindo o nome do paciente e sua prioridade.
+    </div><br><br><br>
+
+    <span class="datas">HeapSort</span><br>
+    <div class="codigo">
+        <pre><code>
+            void HeapSort(struct paciente *heap[], int tam, int *comparacoes, int *trocas){
+                if(!heap)
+                    return;
+
+                int i;
+
+                *comparacoes=0;
+                *trocas=0;
+
+                if(!ChecaHeap(heap,tam))
+                    Heapfy(heap, tam, comparacoes, trocas);
+
+                struct paciente *AUX;
+
+                for (i=tam; i>1; i--) {
+                    (*trocas)++;
+                    AUX= heap[1]; 
+                    heap[1] = heap[i];
+                    heap[i] = AUX;
+                    SacodeHeap (1, i-1, heap, comparacoes, trocas);
+                }
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função verifica se o vetor é heap, se não for, heapfica. Esse algoritmo de ordenação basicamente trabalha com o fato do primeiro elemento do heap sempre ser o maior, por isso, ele é trocado com o último elemento do vetor, ordenando crescentemente ele. Para tanto, sempre que o maior elemento é trocado com o último, ocorre SacodeHeap e o tamanho diminui 1.
+    </div><br><br><br>
+
+    <span class="datas">AlteraHeap</span><br>
+    <div class="codigo">
+        <pre><code>
+            int AlteraHeap(struct paciente *heap[], char nome[], int prioridade, int tam){
+                if(!heap)
+                    return 0;
+
+                int i=1;
+
+                while ((i<=tam)&&(heap[i])&&(strcmp(nome, heap[i]->nome)!= 0)){
+                    i++;
+                }
+
+                if (i> tam || !heap[i])
+                    return 0;
+
+                if (heap[i]->prioridade < prioridade){
+                    int comp, troc; //não utilizados
+
+                    heap[i]->prioridade = prioridade;
+                    InsereHeap(heap, i-1, &comp, &troc);
+                    return 1;
+                }
+                else{
+                    int comp, troc; //não utilizados
+                    heap[i]->prioridade = prioridade;
+                    SacodeHeap(i, tam, heap, &comp, &troc); //Motivo de SacodeHeap ser adaptado
+                    return 1;
+                }
+
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função recebe como parâmetro um nome e uma nova prioridade. A função percorre o vetor buscando um nome que seja idêntico ao nome parâmetro, quando encontra verifica se a nova prioridade é maior ou menor a prioridade já existente do paciente. Se for maior, chama InsereHeap, visto que para "se encaixar" no heap, ele "vai para índices menores", enquadrando no caso do InsereHeap. Quando a nova prioridade é menor, chama SacodeHeap, visto que "o heap é sacudido" até que o vetor se organize em heap novamente. Retorna 1 se alterou com sucesso, e 0 caso contrário.
+    </div><br><br><br>
+
+    <div class="legenda">
+        Funções e operações implementadas em main.c
+    </div>
+
+    <span class="datas">CadastrarPaciente</span><br>
+    <div class="codigo">
+        <pre><code>
+            int CadastrarPaciente(struct paciente *heap[], int *tam, int N){
+                const int MAX= 50; 
+                char nome[MAX];
+                int prioridade;
+
+                printf("\nInsira o nome do paciente\n");
+                fgets(nome, MAX, stdin); //lê o nome
+                nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
+
+                while(nome[0] == '\0'){ //Enquanto o usuário não mandar um usuário válido
+                    printf("Nome do paciente em branco.\n");
+                    printf("Insira o nome do paciente\n");
+                    fgets(nome, MAX, stdin); //lê o nome
+                    nome[strcspn(nome, "\n")] = 0; //reconhece a quebra de linha (ENTER)
+                } 
+
+                printf("\nInsira a prioridade do paciente (quanto maior o número, maior a prioridade)\n");
+                scanf("%d", &prioridade);
+
+                int c; //Serve para limpar o buffer (corredor de 'coisas' que o usuário digitou. Para não quebrar)
+                while ((c=getchar()) != '\n' && c != EOF);
+
+                int sucesso;
+                sucesso = InsereNovoHeap(heap, nome, prioridade, tam, N);
+
+                if (!sucesso) {
+                    printf("\nFalha ao cadastrar paciente, heap cheio ou memória insuficiente.\n");
+                    return 0;
+                }
+
+                printf("\nUsuário cadastrado com sucesso!\n");
+                return 1;
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função adiciona um novo paciente à fila de prioridade. Escaneia um nome e uma prioridade do teclado do usuário. Depois, chama InsereNovoHeap e insere o novo paciente no vetor. Retorna 1 se teve sucesso e imprime um aviso de sucesso, retorna 0 caso contrário e imprime um aviso de erro.
+    </div><br><br><br>
+
+    <span class="datas">ChamarPaciente</span><br>
+    <div class="codigo">
+        <pre><code>
+            void ChamarPaciente(struct paciente *heap[], int *tam){
+                if(!heap||!tam)
+                    return;
+
+                struct paciente *pacienteRemovido;
+
+                printf("\nChamando próximo paciente...\n");
+                pacienteRemovido= RemoveHeap(heap, tam);
+
+                if(pacienteRemovido==NULL){
+                    printf("\nA fila está vazia");
+                    return;
+                }
+
+                printf("Paciente: %s, de prioridade %d, removido da fila\n", pacienteRemovido->nome, pacienteRemovido->prioridade);
+                free(pacienteRemovido);
+                pacienteRemovido=NULL;
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função remove o paciente de maior prioridade do heap, simulando um "chamamento" do próximo paciente. No primeiro passo chama RemoveHeap. Em caso de sucesso, imprime o nome e a prioridade do paciente removido e libera a memória alocada para essa struct. Imprime um aviso de fila vazia se heap estiver vazio.
+    </div><br><br><br>
+
+    <span class="datas">ImprimirPacientes</span><br>
+    <div class="codigo">
+        <pre><code>
+            void ImprimirPacientes(struct paciente *heap[], int tam){
+                if(!ChecaHeap(heap,tam)){
+                    int comparacoes=0, trocas=0;
+                    Heapfy(heap, tam, &comparacoes, &trocas);
+                    printf("\nHeapfy fez %d comparações e %d trocas\n", comparacoes, trocas);
+                }
+
+                printf("\nImprimindo pacientes:\n");
+                if (!ImprimeHeap(heap,tam))
+                    printf("\nHeap vazio\n");
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função imprime todos os pacientes da fila "ordenados" em heap. Em um primeiro passo, verifica se a fila está em heap com ChecaHeap, se não estiver, Heapfica (Heapfy).Depois, com ImprimeHeap, imprime os nomes dos pacientes e suas prioridades. Também imprime quantas trocas heapfy fez (se precisou ser chamado).
+    </div><br><br><br>
+
+    <span class="datas">OrdenarPacientes</span><br>
+    <div class="codigo">
+        <pre><code>
+            void OrdenarPacientes(struct paciente *heap[], int tam){
+                printf("\nOrdenando pacientes...\n");
+                int comparacoes=0, trocas=0;
+
+                HeapSort(heap, tam, &comparacoes, &trocas);
+                printf("\nHeapSort fez %d comparações e %d trocas\n", comparacoes, trocas);
+                
+                printf("\nImprimindo pacientes ordenados:\n");
+                ImprimeHeap(heap,tam);
+
+                comparacoes = 0;
+                trocas = 0;
+                Heapfy(heap,tam, &comparacoes, &trocas);
+                printf("\nHeapfy fez %d comparações e %d trocas para voltar o vetor a um heap\n", comparacoes, trocas);
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função imprime todos os pacientes ordenados por prioridade. Primeiro chama HeapSort para ordenar o vetor e imprime quantas trocas e comparações HeapSort fez. Depois, chama ImprimeHeap e imprime todos os pacientes de forma ordenada. Heapfica o vetor novamente e imprime quantas comparações e trocas heapfy fez.
+    </div><br><br><br>
+
+    <span class="datas">AtualizarPrioridade</span><br>
+    <div class="codigo">
+        <pre><code>
+            void AtualizarPrioridade(struct paciente *heap[], int tam){
+                char nome[50];
+                const int MAX=50;
+                int prioridade, x;
+
+                printf("\nInsira o nome do paciente que deseja alterar a prioridade\n");
+                fgets(nome, MAX, stdin); 
+                nome[strcspn(nome, "\n")] = 0;
+
+                printf("\nInsira a prioridade NOVA do paciente\n");
+                scanf("%d", &prioridade);
+
+                int c; 
+                while ((c=getchar()) != '\n' && c != EOF);
+
+                x= AlteraHeap(heap, nome, prioridade, tam);
+
+                if(!x){
+                    printf("\nPaciente não encontrado (não existe ou foi digitado errado)");
+                    return;
+                }
+                
+                printf("\nPrioridade do paciente %s, alterada!", nome);
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função atualiza a prioridade de um paciente já existente na fila. Escaneia um nome e uma prioridade, chama AlteraHeap verificando se o paciente existe ou não, se existir a prioridade é trocada. Imprime uma mensagem de erro caso falhe, e imprime o  nome do paciente e a prioridade nova caso tenha sucesso.
+    </div><br><br><br>
+
+    <span class="datas">CompararSorts</span><br>
+    <div class="codigo">
+        <pre><code>
+            void CompararSorts(){
+                int *v, *w, *z; //3 vetores
+                int min = -511, max = 512, i, tam = 1024, n_comp, n_trocas;
+
+                if(!(v = malloc(sizeof(int) * (tam+1)))){
+                    printf("n\nao foi possivel alocar o vetor");
+                    return;
+                }
+
+                for(i=1;i<=tam;i++){
+                    v[i] = min+rand()%(max-min+1); /*max-min+1 delimita o intervalo de -511 ate 512 e min+rand() garante que o intervalo comeca em -511*/
+                }
+
+                if(!(w = malloc(sizeof(int) * (tam+1)))){
+                    printf("\nnao foi possivel alocar o vetor");
+                    return;
+                } 
+                
+                if(!(z = malloc(sizeof(int) * (tam+1)))){
+                    printf("\nnao foi possivel alocar o vetor");
+                    return;
+                } 
+
+                memcpy(w, v, sizeof(int) * (tam+1)); /*copia o vetor v em w*/
+                memcpy(z, v, sizeof(int) * (tam+1)); /*copia o vetor v em z*/
+
+                printf("\nOrdenando com Select Sort\n");
+                n_comp = 0;
+                n_trocas = 0;
+                SelectSort(v,tam,&n_comp,&n_trocas);
+                printf("Select Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
+
+                printf("\nOrdenando com Quick Sort\n");
+                n_comp = 0;
+                n_trocas = 0;
+                QuickSort(w,1,tam,&n_comp,&n_trocas);
+                printf("Quick Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
+
+                printf("\nOrdenando com Heap Sort\n");
+                n_comp = 0;
+                n_trocas = 0;
+                HeapSortInt(z,tam,&n_comp,&n_trocas);
+                printf("Heap Sort fez %d comparacoes e %d trocas\n", n_comp, n_trocas);
+
+                int operacao;
+
+                printf("\nInsira 1 para imprimir o vetor ordenado\n");
+                printf("Insira 0 para sair\n");
+
+                scanf("%d", &operacao);
+
+                if(operacao == 0){
+                    free(v);
+                    free(w);
+                    free(z);
+                    return;
+                }
+
+                printf("Vetor ordenado: ");
+                for(i=1;i<=tam;i++)
+                    printf("%3d ", v[i]);
+
+                free(v);
+                free(w);
+                free(z);
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função cria um vetor com 1024 elementos aleatórios e compara 3 algoritmos de ordenação com nº de comparações e trocas para ordená-lo. Primeiramente cria um vetor com números aleatórios e copia em outros dois vetores. Depois, chama SelectSort e imprime as comparações e as trocas feitas. Chama QuickSort e imprime as comparações e trocas feitas. Chama HeapSort e imprime as comparações e trocasa feitas. Depois pergunta ao usuário se ele deseja imprimir o vetor ordenado ou não. Libera a memória alocada para os vetores.
+    </div><br><br><br>
+
+    <span class="datas">LiberaVetor</span><br>
+    <div class="codigo">
+        <pre><code>
+            void LiberaVetor(struct paciente *heap[], int tam){
+                if(!heap)
+                    return;
+
+                int i;
+
+                for(i=1;i<=tam;i++)
+                    free(heap[i]);
+
+                free(heap);
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função passa pelo vetor inteiro liberando a memória de todas as structs pacientes e depois o vetor.
+    </div><br><br><br>
+
+    <span class="datas">main</span><br>
+    <div class="codigo">
+        <pre><code>
+            int main(){
+                int operacao, encerrar = 0, tam; //tam= numero de pacientes no vetor
+                struct paciente **heap;
+                const int MAX=1024; //tamanho máximo do vetor
+
+                srand(0);
+
+                tam=0;
+
+                heap= InicHeap(MAX, &tam);
+
+                do{
+                    printf("\n========================================================================\n");
+                    printf("Insira o numero correspondente a operacao desejada\n");
+                    printf("\n1.Cadastrar novo paciente");
+                    printf("\n2.Chamar proximo paciente");
+                    printf("\n3.Imprimir todos os pacientes em heap");
+                    printf("\n4.Ordenar pacientes (ordem crescente de prioridade)");
+                    printf("\n5.Atualizar prioridade");
+                    printf("\n6.Comparar algoritmos de ordenacao");
+                    printf("\n7.Encerrar programa\n");
+                    printf("\n========================================================================\n");
+                    scanf("%d",&operacao);
+
+                    int c;
+                    while ((c = getchar()) != '\n' && c != EOF);
+
+                    switch(operacao){
+                        case 1:
+                        CadastrarPaciente(heap,&tam, MAX);
+                        break;
+
+                        case 2:
+                        ChamarPaciente(heap,&tam);
+                        break;
+
+                        case 3:
+                        ImprimirPacientes(heap, tam);
+                        break;
+
+                        case 4:
+                        OrdenarPacientes(heap, tam);
+                        break;
+
+                        case 5:
+                        AtualizarPrioridade(heap, tam);
+                        break;
+
+                        case 6:
+                        CompararSorts();
+                        break;
+
+                        case 7:
+                        LiberaVetor(heap, tam);
+                        encerrar = 1;
+                        break;
+
+                        default:
+                        printf("Por favor, digite um numero valido");
+                    }
+                }while(!encerrar);   
+                return 0;
+            }
+        </code></pre>
+    </div>
+    <div class="configuracaoDescricao"></div>
+        Essa função é a função que imprime a interface para o usuário e integra as outras funções. Inicia uma interface explicitando ao usuário que escolha uma das 7 opções disponíveis:<br>
+        1->Cadastrar novo paciente;<br>
+        2->Chamar próximo paciente;<br>
+        3->Imprimir todos os pacientes em heap;<br>
+        4->Ordenar pacientes (ordem crescente de prioridade);<br>
+        5->Atualizar prioridade;<br>
+        6->Comparar algoritmos de ordenação;<br>
+        7->Encerrar programa;<br>
+        Essa escolha ocorre por meio da digitação. Quando o usuário digitar um número e apertar "enter" a operação cuja qual o número representa é chamada. Em caso de ser um número inválido, pede ao usuário para inserir novamente.
+    </div><br><br><br>
+
+</body>
+</html>
