@@ -38,7 +38,7 @@ struct paciente **InicHeap(int N, int *tam){
 
     struct paciente **heap;
     
-    if(!(heap=malloc(sizeof (struct paciente*)* N+1)))
+    if(!(heap=malloc(sizeof (struct paciente*)* (N+1))))
         return NULL;
 
     *tam = 0;

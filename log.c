@@ -162,5 +162,7 @@ int main(){
 
     free(heap);
     printf("\nFim do programa de teste\n");
+
+    return 0;
 }
 
